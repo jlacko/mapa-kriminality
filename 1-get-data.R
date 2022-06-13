@@ -1,9 +1,9 @@
 # stahne surové zipáky do složky /src
 
 library(dplyr)
-library(fs)
+library(curl)
 
-# kartézáček let a měsíců
+# kartézáček let a měsíců - dle potřeby...
 remotes <- expand.grid(year = 2012:2022, month = 1:12) %>% 
    mutate(date = ISOdate(year, month, '01')) %>% 
    mutate(text = format(date, "%Y%m")) %>% 
@@ -19,9 +19,9 @@ remotes <- paste0(
 
 # stahnout ty co chybí... na konci to spadne na 404, ale to neva jsme na konci
 for (remote in remotes) {
-   if(!file.exists(basename(remote))) curl::curl_download(
-      url = remote,
-      destfile = file.path("./src", basename(remote))
-   )
+   if(!file.exists(file.path("./src", basename(remote)))){
+      curl_download(url = remote, 
+                    destfile = file.path("./src", basename(remote)))
+   }
 }
 

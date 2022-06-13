@@ -39,8 +39,11 @@ vignettes/*.pdf
 .Renviron
 
 # složka src
-src/
+src/*
+!src/stake.txt
 
 # stažené voroného polygony
 voronoi.gpkg
 
+# zpracovaná mapa
+mapa-kriminality.rds

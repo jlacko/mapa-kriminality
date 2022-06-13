@@ -1,9 +1,11 @@
-# načte ze zipáků 1 soubor
+# vytvoří ze všech ze zipáků ve složce /src 1 soubor v project rootu
 library(readr)
 library(tidyr)
 library(dplyr)
+library(fs)
 
-zip_files <- fs::dir_ls("./src/", glob = "*.csv.zip") 
+# zipáky jako vektor
+zip_files <- dir_ls("./src/", glob = "*.csv.zip") 
 
 for (soubor in zip_files) {
    
@@ -12,7 +14,7 @@ for (soubor in zip_files) {
 }
 
 # soubory s daty jako vektor
-csv_files <- fs::dir_ls("./src/", regex = "([0-9]+).csv$") 
+csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$") 
 
 vysledek <- data.frame()
 
@@ -30,8 +32,9 @@ for (soubor in csv_files) {
    
 }
 
-# one hot encoding typů zločinů
-vysledek <- vysledek %>%                
+# one hot encoding typů zločinů / formát types není zcela šťastný...
+vysledek <- vysledek %>%
+   rename(crime_id = id) %>% # prostý název id je zranitelný, crime_id bezpečnější
    mutate(id = row_number(),                 
           value = TRUE) %>%                     
    separate_rows(types) %>%           
@@ -41,4 +44,4 @@ vysledek <- vysledek %>%
                values_fill = FALSE) %>% 
    select(-id)
 
-saveRDS(vysledek, "./src/mapa.rds")
+saveRDS(vysledek, "mapa-kriminality.rds")

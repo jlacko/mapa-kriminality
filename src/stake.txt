@@ -1,0 +1,1 @@
+toto je zaražený kolík; slouží k tomu aby git znal jinak ignorovaný adresář
