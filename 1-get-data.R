@@ -12,9 +12,9 @@ remotes <- expand.grid(year = 2012:2022, month = 1:12) %>%
 
 # cesta v logice API
 remotes <- paste0(
-   "https://kriminalita.policie.cz/api/v1/downloads/",
+   "https://kriminalita.policie.cz/api/v2/downloads/",
    remotes,
-   ".csv.zip"
+   ".zip"
 )
 
 # stahnout ty co chybí... na konci to spadne na 404, ale to neva jsme na konci
