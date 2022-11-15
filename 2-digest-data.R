@@ -17,8 +17,8 @@ for (soubor in zip_files) {
 # soubory s daty jako vektor - beru v potaz pouze csvčka s čísly v názvu
 csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$")
 
-# pro zjednodušení pouze letošní
-csv_files <- csv_files[stringr::str_detect(csv_files, pattern = "2022")]
+# pro zjednodušení pouze letošní Q1 - Q3
+csv_files <- csv_files[stringr::str_detect(csv_files, pattern = "20220")]
 
 vysledek <- data.frame()
 

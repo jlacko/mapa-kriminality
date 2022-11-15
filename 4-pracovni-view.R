@@ -11,6 +11,7 @@ ddl_mapa_pracovni <- "CREATE VIEW mapa_pracovni AS
                               	cd.date ,
                               	s.label state,
                               	r.label relevance,
+                                 t.id id_cinu,
                               	t.name nazev_cinu,
                               	t.label popisek_cinu,
                               	mk.geom 
@@ -32,6 +33,9 @@ con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa-kriminality.gpkg") # připojit 
 
 # zahodit co bylo...
 dbExecute(con, "drop view if exists mapa_pracovni;")
+dbExecute(con, "delete from gpkg_contents where table_name = 'mapa_pracovni';")
+dbExecute(con, "delete from gpkg_geometry_columns where table_name = 'mapa_pracovni';")
+
 
 # vytvořit nové, čisté view nad vším
 dbExecute(con, ddl_mapa_pracovni)
