@@ -14,8 +14,11 @@ for (soubor in zip_files) {
    
 } # / end for cyklus zipáků
 
-# soubory s daty jako vektor
-csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$") 
+# soubory s daty jako vektor - beru v potaz pouze csvčka s čísly v názvu
+csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$")
+
+# pro zjednodušení pouze letošní
+csv_files <- csv_files[stringr::str_detect(csv_files, pattern = "2022")]
 
 vysledek <- data.frame()
 
@@ -34,15 +37,35 @@ for (soubor in csv_files) {
       rename(crime_id = id) %>%   # prostý název id je zranitelný, crime_id bezpečnější
       st_as_sf(coords = c("x", "y"), crs = 4326)
    
-   if(!file.exists("mapa_kriminality.gpkg")){
+   
+   geodata <- vysledek %>% 
+      select(crime_id) %>% 
+      unique()
+   
+   non_geo <- vysledek %>% 
+      st_drop_geometry()
+   
+   
+   if(!file.exists("mapa-kriminality.gpkg")){
       
       # první záznam = založit soubor
-      st_write(vysledek, "mapa_kriminality.gpkg")
+      st_write(geodata,
+               dsn = "mapa-kriminality.gpkg",
+               layer = "spatial_data",
+               quiet = T)     
+      st_write(non_geo, "mapa-kriminality.gpkg",
+               layer = "crime_data",
+               quiet = T)
    
       } else {
       
       # n + prvý záznam = přidat k existujícímu
-      st_write(vysledek, "mapa_kriminality.gpkg", append = TRUE, quiet = TRUE)
+      st_write(geodata, "mapa-kriminality.gpkg",
+               layer = "spatial_data",
+               append = T, quiet = T)     
+      st_write(non_geo, "mapa-kriminality.gpkg",
+               layer = "crime_data",
+               append = T, quiet = T)
          
    } # / end if file exits
 

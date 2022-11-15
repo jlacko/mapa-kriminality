@@ -8,25 +8,27 @@ library(RSQLite)
 ddl_mapa_pracovni <- "CREATE VIEW mapa_pracovni AS 
                               select
                               	mk.crime_id ,
-                              	mk.date ,
+                              	cd.date ,
                               	s.label state,
                               	r.label relevance,
                               	t.name nazev_cinu,
                               	t.label popisek_cinu,
                               	mk.geom 
                               from 
-                              	mapa_kriminality mk 
+                              	spatial_data mk
+                                 inner join crime_data cd
+                                    on mk.crime_id = cd.crime_id
                               	inner join relevance r 
-                              		on mk.relevance = r.id 
+                              		on cd.relevance = r.id 
                               	inner join states s 
-                              		on mk.state = s.id 
+                              		on cd.state = s.id 
                               	inner join types t 
-                              		on mk.types = t.id 
+                              		on cd.types = t.id 
                             ;"
 
 
 
-con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa_kriminality.gpkg") # připojit databázi
+con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa-kriminality.gpkg") # připojit databázi
 
 # zahodit co bylo...
 dbExecute(con, "drop view if exists mapa_pracovni;")
@@ -51,7 +53,7 @@ dbExecute(con,
           from (
             select *
             from gpkg_contents goc 
-            where table_name = 'mapa_kriminality') mk
+            where table_name = 'spatial_data') mk
           ;")
 
 

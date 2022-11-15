@@ -24,7 +24,7 @@ ddl_types <- "CREATE TABLE types (
                       label TEXT
                   );"
 
-con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa_kriminality.gpkg") # připojit databázi
+con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa-kriminality.gpkg") # připojit databázi
 
 # zahodit co bylo...
 dbExecute(con, "drop table if exists relevance;")
