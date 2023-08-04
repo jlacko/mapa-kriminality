@@ -7,3 +7,5 @@ Cílem repa je:
 - that's it, to je všechno, víc to neumí :)
 
 Big fat warning: zločinů je hodně, doběh (zejména části tvorby gpkg) je delší; buďto si omezte rozsah datumů, a/nebo skočte na kafe...
+
+Smaller technický warning: při stahování souborů z API PČR do `/src` (čiliže odpalování souboru `1-get-data.R˚) může dojít na chybu 429 = too many requests před tím, než doběhnou data kompletně. Řešením je spuštění souboru s nevelkým časovým odstupem zopakovat.

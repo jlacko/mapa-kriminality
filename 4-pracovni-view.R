@@ -7,18 +7,20 @@ library(RSQLite)
 
 ddl_mapa_pracovni <- "CREATE VIEW mapa_pracovni AS 
                               select
-                              	mk.crime_id ,
-                              	cd.date ,
-                              	s.label state,
+                              	cd.crime_id,
+                                 cd.date,
+                                 s.id kod_stavu,
+                              	s.label stav,
+                                 r.id kod_relevance,
                               	r.label relevance,
-                                 t.id id_cinu,
+                                 t.id kod_cinu,
                               	t.name nazev_cinu,
                               	t.label popisek_cinu,
                               	mk.geom 
                               from 
                               	spatial_data mk
                                  inner join crime_data cd
-                                    on mk.crime_id = cd.crime_id
+                                    on mk.fid = cd.crime_id
                               	inner join relevance r 
                               		on cd.relevance = r.id 
                               	inner join states s 

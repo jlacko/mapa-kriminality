@@ -6,17 +6,17 @@ library(DBI)
 library(RSQLite)
 
 ddl_relevance <- "CREATE TABLE relevance (
-                  id INT,
+                  id INT primary key,
                   label TEXT
               );"
 
 ddl_states <- "CREATE TABLE states (
-                  id INT,
+                  id INT primary key,
                   label TEXT
               );"
 
 ddl_types <- "CREATE TABLE types (
-                      id INT,
+                      id INT primary key,
                       parent_id1 INT,
                       parent_id2 INT,
                       parent_id3 INT,
@@ -59,4 +59,3 @@ types <- readr::read_csv("./src/types.csv")
 DBI::dbAppendTable(con, "types", types)
 
 
-DBI::dbDisconnect(con) # poslední zhasne...

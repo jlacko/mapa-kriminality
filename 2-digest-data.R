@@ -6,7 +6,7 @@ library(sf)
 library(fs)
 
 # zipáky jako vektor
-zip_files <- dir_ls("./src/", glob = "*.csv.zip") 
+zip_files <- dir_ls("./src/", glob = "*.zip") 
 
 for (soubor in zip_files) {
    
@@ -16,9 +16,6 @@ for (soubor in zip_files) {
 
 # soubory s daty jako vektor - beru v potaz pouze csvčka s čísly v názvu
 csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$")
-
-# pro zjednodušení pouze letošní Q1 - Q3
-csv_files <- csv_files[stringr::str_detect(csv_files, pattern = "20220")]
 
 vysledek <- data.frame()
 
@@ -35,7 +32,11 @@ for (soubor in csv_files) {
                                          relevance = col_integer(),
                                          types = col_integer())) %>% 
       rename(crime_id = id) %>%   # prostý název id je zranitelný, crime_id bezpečnější
-      st_as_sf(coords = c("x", "y"), crs = 4326)
+      
+      # aby geopackage nebyla velká jak cyp nastavíme filtr - ať již na datum nebo typ zločinu...
+      filter(date >= as.POSIXct("2022-01-01") & date < as.POSIXct("2022-01-10")) %>% 
+      mutate(date = format(date, "%Y-%m-%d")) %>% # sqlite moc neumí datum jako číslo; text je bulletproof
+      st_as_sf(coords = c("x", "y"), crs = 4326) # z obyčejného df na prostorový
    
    
    geodata <- vysledek %>% 
@@ -52,20 +53,28 @@ for (soubor in csv_files) {
       st_write(geodata,
                dsn = "mapa-kriminality.gpkg",
                layer = "spatial_data",
-               quiet = T)     
-      st_write(non_geo, "mapa-kriminality.gpkg",
-               layer = "crime_data",
-               quiet = T)
+               fid_column_name = "crime_id",
+               quiet = T) 
+      
+      con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa-kriminality.gpkg") 
+      
+      DBI::dbWriteTable(con, "crime_data", non_geo)
+      
+      DBI::dbDisconnect(con) 
    
       } else {
       
       # n + prvý záznam = přidat k existujícímu
       st_write(geodata, "mapa-kriminality.gpkg",
                layer = "spatial_data",
+               fid_column_name = "crime_id",
                append = T, quiet = T)     
-      st_write(non_geo, "mapa-kriminality.gpkg",
-               layer = "crime_data",
-               append = T, quiet = T)
+         
+      con <- DBI::dbConnect(RSQLite::SQLite(), "./mapa-kriminality.gpkg")
+         
+      DBI::dbAppendTable(con, "crime_data", non_geo)
+         
+      DBI::dbDisconnect(con) 
          
    } # / end if file exits
 

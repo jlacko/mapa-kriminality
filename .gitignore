@@ -46,4 +46,4 @@ src/*
 voronoi.gpkg
 
 # zpracovaná mapa
-mapa-kriminality.rds
+mapa-kriminality.*
