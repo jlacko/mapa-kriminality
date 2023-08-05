@@ -52,5 +52,5 @@ ggplot() +
         caption = "původ zdrojových dat: Policie České republiky")
 ```
 <p align="center">
-  <img src="https://github.com/jlacko/mapa-kriminality/blob/main/data-raw/besip-mapa.png?raw=true" alt="přestupky proti BESIP v mapě ČR"/>
+  <img src="https://github.com/jlacko/mapa-kriminality/blob/main/besip-mapa.png?raw=true" alt="přestupky proti BESIP v mapě ČR"/>
 </p>
