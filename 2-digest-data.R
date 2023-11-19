@@ -19,9 +19,12 @@ csv_files <- dir_ls("./src/", regex = "([0-9]+).csv$")
 
 vysledek <- data.frame()
 
+# wipe the slate clean = nechceme vkládat nová data do starých; raději přepsat nez riskovat konflikty
+if(file.exists("mapa-kriminality.gpkg")) file.remove("mapa-kriminality.gpkg")
+
 # načíst všechny soubory do jednoho
 for (soubor in csv_files) {
-   
+
    vysledek <- read_csv(soubor,
                         col_types = cols(id = col_integer(),
                                          x = col_double(),
