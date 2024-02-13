@@ -35,9 +35,10 @@ for (soubor in csv_files) {
                                          relevance = col_integer(),
                                          types = col_integer())) %>% 
       rename(crime_id = id) %>%   # prostý název id je zranitelný, crime_id bezpečnější
+      filter(date >= as.POSIXlt("2016-01-01")) %>% # starším datům nejde tolik věřit
       
       # aby geopackage nebyla velká jak cyp nastavíme filtr - ať již na datum nebo typ zločinu...
-      filter(date >= as.POSIXct("2022-01-01") & date < as.POSIXct("2022-02-01")) %>% 
+      filter(types == 42) %>% # tj. krádeže jízdních kol - nebo něco jiného, whatever...
       mutate(date = format(date, "%Y-%m-%d")) %>% # sqlite moc neumí datum jako číslo; text je bulletproof
       st_as_sf(coords = c("x", "y"), crs = 4326) # z obyčejného df na prostorový
    
