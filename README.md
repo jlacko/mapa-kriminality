@@ -10,6 +10,9 @@ Big fat warning: zločinů je hodně, doběh (zejména části tvorby gpkg) je d
 
 Smaller technický warning: při stahování souborů z API PČR do `/src` (čiliže odpalování souboru `1-get-data.R`) může dojít na chybu 429 = too many requests před tím, než doběhnou data kompletně. Řešením je spuštění souboru s nevelkým časovým odstupem zopakovat.
 
+### Upozornění na problematický číselník (stav k 2024-08-19)
+Ze křížového srovnání dat z csvček a online mapy kriminality mám důvodné podezření, že číselník stavů je nekonzistentní - konkrétně stav číslo 2 (objasněno dodatečně) v csvčku se zdá lícovat se stavem "neobjasněno" v online mapě. Což je docela rozdíl, bo objasněnost je relevantní metrika.
+
 ## Příklad využití v praxi
 
 Protože ukázka je více jak 1000 slov: krátká ukázka kódu + vizualizace

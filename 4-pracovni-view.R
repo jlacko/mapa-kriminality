@@ -7,7 +7,7 @@ library(RSQLite)
 
 ddl_mapa_pracovni <- "CREATE VIEW mapa_pracovni AS 
                               select
-                              	cd.crime_id,
+                              	mk.fid crime_id,
                                  cd.date,
                                  s.id kod_stavu,
                               	s.label stav,
